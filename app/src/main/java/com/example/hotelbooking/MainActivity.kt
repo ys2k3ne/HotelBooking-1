@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
     fun searchList(text: String) {
         val searchList = java.util.ArrayList<DataClass>()
         for (dataClass in dataList) {
-            if (dataClass.dataTitle?.lowercase()
+            if (dataClass.hotelName?.lowercase()
                     ?.contains(text.lowercase(Locale.getDefault())) == true
             ) {
                 searchList.add(dataClass)

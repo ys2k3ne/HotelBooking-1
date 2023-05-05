@@ -22,18 +22,21 @@ class HotelAdapter(private val context: Context, private var dataList: List<Data
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Glide.with(context).load(dataList[position].dataImage)
+        Glide.with(context).load(dataList[position].hotelImage)
             .into(holder.recImage)
-        holder.recTitle.text = dataList[position].dataTitle
-        holder.recDesc.text = dataList[position].dataDesc
-        holder.recPriority.text = dataList[position].dataPriority
+        holder.recTitle.text = dataList[position].hotelName
+        holder.recDesc.text = dataList[position].hotelAddress
+        holder.recPriority.text = dataList[position].hotelPrice
 
         holder.recCard.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("Image", dataList[holder.adapterPosition].dataImage)
-            intent.putExtra("Description", dataList[holder.adapterPosition].dataDesc)
-            intent.putExtra("Title", dataList[holder.adapterPosition].dataTitle)
-            intent.putExtra("Priority", dataList[holder.adapterPosition].dataPriority)
+            intent.putExtra("Image", dataList[holder.adapterPosition].hotelImage)
+            intent.putExtra("Address", dataList[holder.adapterPosition].hotelAddress)
+            intent.putExtra("Hotel Name", dataList[holder.adapterPosition].hotelName)
+            intent.putExtra("Hotel Price", dataList[holder.adapterPosition].hotelPrice)
+            intent.putExtra("Hotel Rating", dataList[holder.adapterPosition].hotelRating)
+            intent.putExtra("description", dataList[holder.adapterPosition].description)
+            intent.putExtra("available", dataList[holder.adapterPosition].available)
             context.startActivity(intent)
         }
 

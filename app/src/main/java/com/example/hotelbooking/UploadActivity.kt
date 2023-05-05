@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.example.hotelbooking.models.DataClass
 import com.example.hotelbooking.databinding.ActivityUploadBinding
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.text.DateFormat
@@ -18,13 +19,16 @@ import java.util.Calendar
 class UploadActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUploadBinding
-    var imageURL: String? = null
+    private lateinit var dbRef: DatabaseReference
+    var imageURL: String = ""
     var uri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUploadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        dbRef = FirebaseDatabase.getInstance().getReference("hotels")
 
         val activityResultLauncher = registerForActivityResult<Intent, ActivityResult>(
             ActivityResultContracts.StartActivityForResult()) { result ->
@@ -67,14 +71,15 @@ class UploadActivity : AppCompatActivity() {
         }
     }
     private fun uploadData(){
-        val title = binding.uploadTitle.text.toString()
-        val desc = binding.uploadDesc.text.toString()
-        val priority = binding.uploadPriority.text.toString()
+        val hotelName = binding.uploadTitle.text.toString()
+        val hotelAddress = binding.uploadDesc.text.toString()
+        val hotelPrice = binding.uploadPriority.text.toString()
 
-        val dataClass = DataClass(title, desc, priority, imageURL)
+        val roomId = dbRef.push().key!!
+        val dataClass = DataClass(roomId, hotelName, hotelAddress, hotelPrice,4f, imageURL, "", true)
         val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
 
-        FirebaseDatabase.getInstance().getReference("hotels").child(currentDate)
+        dbRef.child(currentDate)
             .setValue(dataClass).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this@UploadActivity, "Saved", Toast.LENGTH_SHORT).show()
