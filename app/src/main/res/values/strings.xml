@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">HotelBooking</string>
+    <string name="payment_method_text">Phương thức thanh toán: %1$s</string>
+    <string name="payment_amount_text">Số tiền thanh toán: %1$.2f đ</string>
+    <string name="payment_confirmation_error_message">Lỗi xác nhận thanh toán: %1$s</string>
+
 
 </resources>

@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PaymentActivity">
+    android:orientation="vertical"
+    tools:context=".PaymentActivity">>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+<TextView
+    android:id="@+id/checkInLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Check-in date:"
+    android:textSize="20sp" />
+
+<TextView
+    android:id="@+id/checkInTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="YYYY-MM-DD"
+    android:textSize="18sp" />
+
+<TextView
+    android:id="@+id/checkOutLabel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Check-out date:"
+    android:textSize="20sp" />
+
+<TextView
+    android:id="@+id/checkOutTextView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="YYYY-MM-DD"
+    android:textSize="18sp" />
+
+<Button
+    android:id="@+id/payButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Pay" />
+
+<Button
+    android:id="@+id/backButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Back" />
+
+</LinearLayout>
