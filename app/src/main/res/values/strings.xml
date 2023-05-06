@@ -4,5 +4,6 @@
     <string name="payment_amount_text">Số tiền thanh toán: %1$.2f đ</string>
     <string name="payment_confirmation_error_message">Lỗi xác nhận thanh toán: %1$s</string>
 
-
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
 </resources>

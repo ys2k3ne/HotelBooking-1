@@ -12,11 +12,14 @@ import androidx.appcompat.app.AlertDialog
 import com.example.hotelbooking.databinding.ActivityLoginBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseApp.initializeApp(this) // Thêm dòng này
 
         firebaseAuth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
         binding.loginButton.setOnClickListener {
             val email = binding.loginEmail.text.toString()
@@ -35,8 +39,22 @@ class LoginActivity : AppCompatActivity() {
 
                 firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener{
                     if (it.isSuccessful){
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
+                        // Kiểm tra quyền admin
+                        val currentUser = firebaseAuth.currentUser
+                        if (currentUser != null) {
+                            val adminRef = firestore.collection("admins").whereEqualTo("email", currentUser.email)
+                            adminRef.get().addOnSuccessListener { documents ->
+                                if (documents.size() > 0) {
+                                    // Đăng nhập với quyền admin
+                                    val intent = Intent(this, AdminActivity::class.java)
+                                    startActivity(intent)
+                                } else {
+                                    // Đăng nhập với quyền user
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     } else {
                         Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
                     }
@@ -88,4 +106,5 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+
 }
