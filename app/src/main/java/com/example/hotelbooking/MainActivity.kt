@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
 
         dataList = ArrayList()
-        adapter = HotelAdapter(this@MainActivity, dataList)
+        adapter = HotelAdapter(this@MainActivity, dataList, false)
         binding.recyclerView.adapter = adapter
         databaseReference = FirebaseDatabase.getInstance().getReference("hotels")
         dialog.show()
@@ -60,10 +60,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.fab.setOnClickListener(View.OnClickListener {
-            val intent = Intent(this@MainActivity, UploadActivity::class.java)
-            startActivity(intent)
-        })
 
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

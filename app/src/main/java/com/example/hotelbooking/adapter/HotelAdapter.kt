@@ -11,10 +11,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.hotelbooking.DetailActivity
+import com.example.hotelbooking.EditHotelActivity
 import com.example.hotelbooking.R
 import com.example.hotelbooking.models.DataClass
 
-class HotelAdapter(private val context: Context, private var dataList: List<DataClass>) : RecyclerView.Adapter<ViewHolder>() {
+class HotelAdapter(private val context: Context, private var dataList: List<DataClass>, private val isAdmin: Boolean) : RecyclerView.Adapter<ViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.recycler_item, parent, false)
@@ -29,7 +31,12 @@ class HotelAdapter(private val context: Context, private var dataList: List<Data
         holder.recPriority.text = dataList[position].hotelPrice
 
         holder.recCard.setOnClickListener {
-            val intent = Intent(context, DetailActivity::class.java)
+            val intent = if (isAdmin) {
+                Intent(context, EditHotelActivity::class.java)
+            } else {
+                Intent(context, DetailActivity::class.java)
+            }
+
             intent.putExtra("Image", dataList[holder.adapterPosition].hotelImage)
             intent.putExtra("Address", dataList[holder.adapterPosition].hotelAddress)
             intent.putExtra("Hotel Name", dataList[holder.adapterPosition].hotelName)
