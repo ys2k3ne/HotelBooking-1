@@ -2,7 +2,6 @@ package com.example.hotelbooking
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hotelbooking.databinding.ActivityPaymentBinding
@@ -17,7 +16,7 @@ class PaymentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPaymentBinding
     private var checkInDate: String? = null
     private var checkOutDate: String? = null
-    private var hotelPrice: String? = null
+    private var hotelPrice: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,40 +28,38 @@ class PaymentActivity : AppCompatActivity() {
         if (extras != null) {
             checkInDate = extras.getString("checkInDate")
             checkOutDate = extras.getString("checkOutDate")
-            hotelPrice = extras.getString("hotelPrice")
+            hotelPrice = extras.getString("hotelPrice")?.toDouble()
+
 
             // Display booking information on the UI
             binding.checkInDate.text = checkInDate
             binding.checkOutDate.text = checkOutDate
-            binding.hotelPrice.text = hotelPrice
-            // Convert EditText to TextView
-            val totalAmountTextView = binding.totalAmount as TextView
-
-// Set the total amount to pay
-            totalAmountTextView.text = calculateTotalAmount().toString()
+            binding.hotelPrice.text = String.format("%.2f", hotelPrice)
+            binding.totalAmount.text = String.format("%.2f", calculateTotalAmount())
         }
+
+
 
         // Set event listener for the Confirm Payment button
         binding.confirmPaymentButton.setOnClickListener { confirmPayment() }
     }
 
     // Calculate the total amount to pay
-    private fun calculateTotalAmount(): Int {
+    private fun calculateTotalAmount(): Double {
         val numOfDays = getNumOfDays(checkInDate ?: "", checkOutDate ?: "")
-        val price = hotelPrice?.replace("[^\\d]".toRegex(), "")?.toInt() ?: 0
-        return numOfDays * price
+        return numOfDays * hotelPrice!!
     }
+
 
     // Save payment information to Firebase database
     private fun confirmPayment() {
         // Get payment information from UI
         val cardNumber = binding.cardNumber.text.toString()
-        val cardHolderName = binding.cardHolderName.text.toString()
-        val cardExpirationDate = binding.cardExpirationDate.text.toString()
+        val cardExpirationDate = binding.cardExpiry.text.toString()
         val cardCvv = binding.cardCvv.text.toString()
 
         // Validate payment information
-        if (cardNumber.isEmpty() || cardHolderName.isEmpty() || cardExpirationDate.isEmpty() || cardCvv.isEmpty()) {
+        if (cardNumber.isEmpty() ||  cardExpirationDate.isEmpty() || cardCvv.isEmpty()) {
             Toast.makeText(this, "Please enter all payment information", Toast.LENGTH_SHORT).show()
             return
         }
@@ -70,7 +67,6 @@ class PaymentActivity : AppCompatActivity() {
         // Create a PaymentInfo object to store payment information
         val paymentInfo = PaymentInfo(
             cardNumber = cardNumber,
-            cardHolderName = cardHolderName,
             cardExpirationDate = cardExpirationDate,
             cardCvv = cardCvv,
             checkInDate = checkInDate!!,

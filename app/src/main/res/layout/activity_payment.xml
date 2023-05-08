@@ -1,95 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_payment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/white">
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/check_in_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/check_in_date"/>
+        android:text="@string/check_in_date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"/>
 
     <TextView
-        android:id="@+id/checkInDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/check_in_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/check_out_date"/>
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/check_in_label"
+        android:layout_toEndOf="@id/check_in_label"
+        android:layout_marginStart="8dp"/>
 
     <TextView
-        android:id="@+id/checkOutDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/check_out_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hotel_price"/>
+        android:text="@string/check_out_date"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/check_in_label"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
     <TextView
-        android:id="@+id/hotelPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/check_out_date"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_amount"/>
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/check_out_label"
+        android:layout_toEndOf="@id/check_out_label"
+        android:layout_marginStart="8dp"/>
 
     <TextView
-        android:id="@+id/totalAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/hotel_price_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/card_number"/>
+        android:text="@string/hotel_price"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/check_out_label"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/hotel_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/hotel_price_label"
+        android:layout_toEndOf="@id/hotel_price_label"
+        android:layout_marginStart="8dp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        android:layout_below="@id/hotel_price"
+        android:layout_marginTop="16dp"/>
+
+    <TextView
+        android:id="@+id/total_amount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/total_amount"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
+
+    <TextView
+        android:id="@+id/total_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/grey"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/total_amount_label"
+        android:layout_toEndOf="@id/total_amount_label"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/card_number_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/card_number"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/total_amount_label"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
     <EditText
-        android:id="@+id/cardNumber"
+        android:id="@+id/card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"/>
+        android:hint="@string/card_number_hint"
+        android:inputType="number"
+        android:backgroundTint="@color/grey"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_below="@id/card_number_label"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/card_expiry_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/card_holder_name"/>
+        android:text="@string/card_expiry"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/card_number"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
     <EditText
-        android:id="@+id/cardHolderName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/card_expiry"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:hint="@string/card_expiry_hint"
+        android:inputType="date"
+        android:backgroundTint="@color/grey"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/card_expiry_label"
+        android:layout_toEndOf="@id/card_expiry_label"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"/>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/card_cvv_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/card_expiration_date"/>
+        android:text="@string/card_cvv"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_below="@id/card_expiry_label"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"/>
 
     <EditText
-        android:id="@+id/cardExpirationDate"
-        android:layout_width="match_parent"
+        android:id="@+id/card_cvv"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:inputType="date"/>
+        android:hint="@string/card_cvv_hint"
+        android:inputType="numberPassword"
+        android:backgroundTint="@color/grey"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_alignBaseline="@id/card_cvv_label"
+        android:layout_toEndOf="@id/card_cvv_label"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"/>
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/confirm_payment_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/card_cvv"/>
+        android:text="@string/confirm_payment"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:background="@color/lavender"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_below="@id/card_cvv"/>
 
-    <EditText
-        android:id="@+id/cardCvv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"/>
-
-    <Button
-        android:id="@+id/confirmPaymentButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/confirm_payment"/>
-</LinearLayout>
+</RelativeLayout>

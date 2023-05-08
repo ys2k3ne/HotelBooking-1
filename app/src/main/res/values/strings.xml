@@ -19,4 +19,12 @@
     <string name="payment_successful">Payment Successful!</string>
     <string name="payment_failed">Payment Failed</string>
     <string name="try_again">Please try again later.</string>
+    <string name="expiration_date">Expiration Date</string>
+    <string name="cvv">CVV</string>
+    <string name="pay">Pay</string>
+    <string name="card_number_hint">Nhập số thẻ</string>
+    <string name="card_expiry">Enter card expiry date</string>
+    <string name="card_expiry_hint">12/24</string>
+    <string name="card_cvv_hint">Enter CVV code</string>
+
 </resources>
