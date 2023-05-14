@@ -11,9 +11,9 @@ import com.google.firebase.database.FirebaseDatabase
 import java.time.LocalDate
 import java.util.*
 
+private lateinit var binding: ActivityDetailBinding
 class DetailActivity : AppCompatActivity() {
     var imageUrl = ""
-    private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

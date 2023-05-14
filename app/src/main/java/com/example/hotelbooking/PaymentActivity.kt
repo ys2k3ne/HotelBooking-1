@@ -28,21 +28,24 @@ class PaymentActivity : AppCompatActivity() {
         if (extras != null) {
             checkInDate = extras.getString("checkInDate")
             checkOutDate = extras.getString("checkOutDate")
-            hotelPrice = extras.getString("hotelPrice")?.toDouble()
-
+            hotelPrice = extras.getString("hotelPrice")?.toDoubleOrNull()
 
             // Display booking information on the UI
             binding.checkInDate.text = checkInDate
             binding.checkOutDate.text = checkOutDate
-            binding.hotelPrice.text = String.format("%.2f", hotelPrice)
-            binding.totalAmount.text = String.format("%.2f", calculateTotalAmount())
+            if (hotelPrice != null) {
+                binding.hotelPrice.text = String.format("%.2f", hotelPrice)
+                binding.totalAmount.text = String.format("%.2f", calculateTotalAmount())
+            } else {
+                Toast.makeText(this, "Invalid hotel price", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
-
-
 
         // Set event listener for the Confirm Payment button
         binding.confirmPaymentButton.setOnClickListener { confirmPayment() }
     }
+
 
     // Calculate the total amount to pay
     private fun calculateTotalAmount(): Double {
@@ -59,7 +62,7 @@ class PaymentActivity : AppCompatActivity() {
         val cardCvv = binding.cardCvv.text.toString()
 
         // Validate payment information
-        if (cardNumber.isEmpty() ||  cardExpirationDate.isEmpty() || cardCvv.isEmpty()) {
+        if (cardNumber.isEmpty() || cardExpirationDate.isEmpty() || cardCvv.isEmpty()) {
             Toast.makeText(this, "Please enter all payment information", Toast.LENGTH_SHORT).show()
             return
         }
@@ -73,8 +76,7 @@ class PaymentActivity : AppCompatActivity() {
             checkOutDate = checkOutDate!!,
             totalAmount = calculateTotalAmount()
         )
-
-        // Save payment information to Firebase database
+// Save payment information to Firebase database
         val database = FirebaseDatabase.getInstance()
         val paymentRef = database.getReference("payments").push()
         paymentRef.setValue(paymentInfo)

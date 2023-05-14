@@ -7,19 +7,20 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.hotelbooking.models.DataClass
 import com.example.hotelbooking.adapter.HotelAdapter
 import com.example.hotelbooking.databinding.ActivityAdminBinding
+import com.example.hotelbooking.models.DataClass
 import com.google.firebase.database.*
 import java.util.*
 
-
 class AdminActivity : AppCompatActivity() {
-    var databaseReference: DatabaseReference? = null
-    var eventListener: ValueEventListener? = null
-    private lateinit var dataList: ArrayList<DataClass>
-    private lateinit var adapter: HotelAdapter
+
     private lateinit var binding: ActivityAdminBinding
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var dataList: MutableList<DataClass>
+    private lateinit var adapter: HotelAdapter
+    private lateinit var dialog: AlertDialog
+    private lateinit var eventListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,19 +31,15 @@ class AdminActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = gridLayoutManager
         binding.search.clearFocus()
 
-        val builder = AlertDialog.Builder(this@AdminActivity)
-        builder.setCancelable(false)
-        builder.setView(R.layout.progress_layout)
-        val dialog = builder.create()
+        dialog = createProgressDialog()
         dialog.show()
 
-        dataList = ArrayList()
+        dataList = mutableListOf()
         adapter = HotelAdapter(this@AdminActivity, dataList, true)
         binding.recyclerView.adapter = adapter
         databaseReference = FirebaseDatabase.getInstance().getReference("hotels")
-        dialog.show()
 
-        eventListener = databaseReference!!.addValueEventListener(object : ValueEventListener {
+        eventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 dataList.clear()
                 for (itemSnapshot in snapshot.children) {
@@ -58,7 +55,9 @@ class AdminActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 dialog.dismiss()
             }
-        })
+        }
+
+        databaseReference.addValueEventListener(eventListener)
 
         binding.fab.setOnClickListener(View.OnClickListener {
             val intent = Intent(this@AdminActivity, UploadActivity::class.java)
@@ -76,15 +75,22 @@ class AdminActivity : AppCompatActivity() {
             }
         })
     }
-    fun searchList(text: String) {
-        val searchList = java.util.ArrayList<DataClass>()
-        for (dataClass in dataList) {
-            if (dataClass.hotelName?.lowercase()
-                    ?.contains(text.lowercase(Locale.getDefault())) == true
-            ) {
-                searchList.add(dataClass)
-            }
-        }
-        adapter.searchDataList(searchList)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        databaseReference.removeEventListener(eventListener)
+    }
+
+    private fun createProgressDialog(): AlertDialog {
+        val builder = AlertDialog.Builder(this@AdminActivity)
+        builder.setCancelable(false)
+        builder.setView(layoutInflater.inflate(R.layout.progress_layout, null))
+        return builder.create()
+    }
+
+    private fun searchList(text: String) {
+        val searchText = text.lowercase(Locale.getDefault())
+        val filteredList = dataList.filter { it.hotelName?.lowercase()?.contains(searchText) == true }
+        adapter.searchDataList(filteredList)
     }
 }
