@@ -1,27 +1,20 @@
 package com.example.hotelbooking
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import com.bumptech.glide.Glide
-import com.example.hotelbooking.databinding.ActivityDetailBinding
 import com.example.hotelbooking.databinding.ActivityEditHotelBinding
-import com.example.hotelbooking.databinding.UpdateDialogBinding
-import com.example.hotelbooking.models.BookingInfo
+import com.example.hotelbooking.models.DataClass
 import com.google.firebase.database.FirebaseDatabase
-import java.time.LocalDate
-import java.util.*
 
 class EditHotelActivity : AppCompatActivity() {
-    var imageUrl = ""
+
     private lateinit var binding: ActivityEditHotelBinding
+    private var imageUrl = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +22,7 @@ class EditHotelActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bundle = intent.extras
-        val hotelId = bundle!!.getString("hotel_id") ?: ""
+        val hotelId = bundle!!.getString("HotelId") ?: ""
         if (bundle != null) {
 
             val hotelAdd = bundle.getString("Address")
@@ -57,70 +50,119 @@ class EditHotelActivity : AppCompatActivity() {
                 binding.hotelStatus.text = "Trạng thái: not available"
             }
         }
-//        binding.update.setOnClickListener {
-//            val hotelName = binding.detailTitle.text.toString()
-//            openUpdateDialog(hotelName, hotelId)
-//        }
+
+        binding.update.setOnClickListener {
+            openUpdateDialog(
+                hotelId,
+                DataClass(
+                    bundle!!.getString("HotelId")!!,
+                    bundle.getString("Hotel Name")!!,
+                    bundle.getString("Address")!!,
+                    bundle.getString("Hotel Price")!!,
+                    bundle.getFloat("Hotel Rating"),
+                    bundle.getString("Image")!!,
+                    bundle.getString("description")!!,
+                    bundle.getBoolean("available")
+                )
+            )
+        }
+
+        binding.delete.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+                .setTitle("Xác nhận xóa khách sạn?")
+                .setPositiveButton("Có") { _, _ ->
+                    deleteHotelData(hotelId)
+                }
+                .setNegativeButton("Không", null)
+                .create()
+            alertDialog.show()
+        }
     }
 
-//    private fun openUpdateDialog(hotelName: String, hotelId: String) {
-//        // Khởi tạo AlertDialog
-//        val builder = AlertDialog.Builder(this)
-//        val dialogBinding = UpdateDialogBinding.inflate(LayoutInflater.from(this))
-//        builder.setView(dialogBinding.root)
-//
-//        // Ánh xạ các thành phần giao diện trong layout
-//        val nameEditText = dialogBinding.hotelNameEditText
-//        val priceEditText = dialogBinding.hotelPriceEditText
-//        val addressEditText = dialogBinding.hotelAddressEditText
-//        val descriptionEditText = dialogBinding.hotelDescriptionEditText
-//        val statusSwitch = dialogBinding.hotelStatusSwitch
-//        val cancelBtn = dialogBinding.btnCancel
-//        val saveBtn = dialogBinding.btnUpdateData
-//
-//        // Set giá trị cho các EditText và SwitchCompat
-//        nameEditText.setText(hotelName)
-//
-//        // Thiết lập nút "Lưu" trong hộp thoại
-//        builder.setPositiveButton("Lưu") { dialog, which ->
-//            // Lấy giá trị từ các EditText và SwitchCompat
-//            val name = nameEditText.text.toString()
-//            val price = priceEditText.text.toString()
-//            val address = addressEditText.text.toString()
-//            val description = descriptionEditText.text.toString()
-//            val available = statusSwitch.isChecked
-//
-//            // Cập nhật thông tin khách sạn trong database
-//            val ref = FirebaseDatabase.getInstance().getReference("hotels").child(hotelId)
-//            val map = mutableMapOf<String, Any>()
-//            map["Hotel Name"] = name
-//            map["Hotel Price"] = price
-//            map["Address"] = address
-//            map["description"] = description
-//            map["available"] = available
-//            ref.updateChildren(map)
-//
-//            // Cập nhật lại giá trị trong TextView của Activity
-//            binding.detailTitle.text = name
-//            binding.detailPriority.text = "Giá tiền: $price VND"
-//            binding.detailDesc.text = "Địa chỉ : $address"
-//            binding.motaHotel.text = description
-//            if (available) {
-//                binding.hotelStatus.text = "Trạng thái: available"
-//            } else {
-//                binding.hotelStatus.text = "Trạng thái: not available"
-//            }
-//        }
-//
-//        // Thiết lập nút "Hủy" trong hộp thoại
-//        builder.setNegativeButton("Hủy") { dialog, which ->
-//            dialog.dismiss()
-//        }
-//
-//        // Hiển thị hộp thoại
-//        val dialog = builder.create()
-//        dialog.show()
-//    }
+    private fun deleteHotelData(hotelId: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("hotels").child(hotelId)
+        ref.removeValue()
+            .addOnSuccessListener {
+                // Handle success here
+                finish()
+            }
+            .addOnFailureListener {
+                // Handle errors here
+            }
+    }
 
+
+
+    private fun openUpdateDialog(hotelID: String, hotel: DataClass?) {
+        val mDialog = AlertDialog.Builder(this)
+        val inflater = layoutInflater
+        val mDialogView = inflater.inflate(R.layout.update_dialog, null)
+        mDialog.setView(mDialogView)
+
+        val etName = mDialogView.findViewById<EditText>(R.id.hotel_name_edit_text)
+        val etAddress = mDialogView.findViewById<EditText>(R.id.hotel_address_edit_text)
+        val etPrice = mDialogView.findViewById<EditText>(R.id.hotel_price_edit_text)
+        val etDescription = mDialogView.findViewById<EditText>(R.id.hotel_description_edit_text)
+        val swStatus = mDialogView.findViewById<Switch>(R.id.hotel_status_switch)
+        val btnUpdateData = mDialogView.findViewById<Button>(R.id.btnUpdateData)
+
+        etName.setText(hotel?.hotelName)
+        etAddress.setText(hotel?.hotelAddress)
+        etPrice.setText(hotel?.hotelPrice)
+        etDescription.setText(hotel?.description)
+        swStatus.isChecked = hotel?.available ?: false
+
+        mDialog.setTitle("Update...")
+        val alertDialog = mDialog.create()
+        alertDialog.show()
+
+        btnUpdateData.setOnClickListener {
+            val status = if (swStatus.isChecked) {
+                "available"
+            } else {
+                "not available"
+            }
+            updateHotelData(
+                hotelID,
+                etName.text.toString(),
+                etAddress.text.toString(),
+                etPrice.text.toString(),
+                etDescription.text.toString(),
+                status
+            )
+            alertDialog.dismiss() // Đóng dialog
+        }
+
+    }
+
+    private fun updateHotelData(
+        hotelID: String,
+        name: String,
+        address: String,
+        price: String,
+        description: String,
+        status: String
+    ) {
+        val ref = FirebaseDatabase.getInstance().getReference("hotels").child(hotelID)
+
+        val newData = DataClass(
+            hotelID,
+            name,
+            address,
+            price,
+            binding.hotelRatingBar.rating,
+            imageUrl,
+            description,
+            status == "available"
+        )
+
+        ref.setValue(newData)
+            .addOnSuccessListener {
+                // Handle success here
+            }
+            .addOnFailureListener {
+                // Handle errors here
+            }
+    }
 }
 
