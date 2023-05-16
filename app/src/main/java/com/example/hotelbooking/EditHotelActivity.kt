@@ -97,7 +97,6 @@ class EditHotelActivity : AppCompatActivity() {
                 // Xử lý khi xóa không thành công
                 Toast.makeText(this, "Xóa không thành công", Toast.LENGTH_SHORT).show()
             }
-
     }
 
 
@@ -114,8 +113,6 @@ class EditHotelActivity : AppCompatActivity() {
         val swStatus = mDialogView.findViewById<Switch>(R.id.hotel_status_switch)
         val btnUpdateData = mDialogView.findViewById<Button>(R.id.btnUpdateData)
         val btnCancel = mDialogView.findViewById<Button>(R.id.btnCancel)
-
-
 
         etName.setText(hotel?.hotelName)
         etAddress.setText(hotel?.hotelAddress)
@@ -148,6 +145,7 @@ class EditHotelActivity : AppCompatActivity() {
             alertDialog.dismiss()
         }
 
+
     }
 
     private fun updateHotelData(
@@ -173,17 +171,11 @@ class EditHotelActivity : AppCompatActivity() {
 
         ref.setValue(newData)
             .addOnSuccessListener {
-                // Cập nhật thành công, quay lại trang AdminActi
-                val intent = Intent(this, AdminActivity::class.java)
-                startActivity(intent)
-                finish()
+                // Handle success here
             }
             .addOnFailureListener {
-                // Xử lý khi cập nhật không thành công
-                Toast.makeText(this, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
+                // Handle errors here
             }
-
 
     }
 }
-

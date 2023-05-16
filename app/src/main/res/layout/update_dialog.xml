@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên khách sạn" />
+
+    <EditText
+        android:id="@+id/hotel_name_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nhập tên khách sạn"
+        android:inputType="text" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Giá tiền" />
+
+    <EditText
+        android:id="@+id/hotel_price_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="Nhập giá tiền" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ" />
+
+    <EditText
+        android:id="@+id/hotel_address_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPostalAddress"
+        android:hint="Nhập địa chỉ" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mô tả" />
+
+    <EditText
+        android:id="@+id/hotel_description_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:maxLines="6"
+        android:scrollbars="vertical"
+        android:hint="Nhập mô tả" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Trạng thái" />
+
+    <Switch
+        android:id="@+id/hotel_status_switch"
+        android:layout_width="275dp"
+        android:layout_height="48dp"
+        android:text="Khách sạn có sẵn không?" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hủy bỏ" />
+
+        <Button
+            android:id="@+id/btnUpdateData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu" />
+    </LinearLayout>
+
+</LinearLayout>
