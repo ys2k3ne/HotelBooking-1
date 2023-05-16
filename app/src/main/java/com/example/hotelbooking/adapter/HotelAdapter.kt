@@ -37,6 +37,7 @@ class HotelAdapter(private val context: Context, private var dataList: List<Data
                 Intent(context, DetailActivity::class.java)
             }
 
+            intent.putExtra("HotelID", dataList[holder.adapterPosition].hotelID)
             intent.putExtra("Image", dataList[holder.adapterPosition].hotelImage)
             intent.putExtra("Address", dataList[holder.adapterPosition].hotelAddress)
             intent.putExtra("Hotel Name", dataList[holder.adapterPosition].hotelName)

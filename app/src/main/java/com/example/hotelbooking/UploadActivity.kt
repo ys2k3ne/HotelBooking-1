@@ -77,9 +77,9 @@ class UploadActivity : AppCompatActivity() {
 
         val roomId = dbRef.push().key!!
         val dataClass = DataClass(roomId, hotelName, hotelAddress, hotelPrice,4f, imageURL, "", true)
-        val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
+//        val currentDate = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
 
-        dbRef.child(currentDate)
+        dbRef.child(roomId)
             .setValue(dataClass).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this@UploadActivity, "Saved", Toast.LENGTH_SHORT).show()
