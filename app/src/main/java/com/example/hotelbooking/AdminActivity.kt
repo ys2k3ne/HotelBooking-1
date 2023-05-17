@@ -29,7 +29,7 @@ class AdminActivity : AppCompatActivity() {
 
         val gridLayoutManager = GridLayoutManager(this@AdminActivity, 1)
         binding.recyclerView.layoutManager = gridLayoutManager
-        binding.search.clearFocus()
+        binding.searchView.clearFocus()
 
         dialog = createProgressDialog()
         dialog.show()
@@ -64,7 +64,7 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent)
         })
 
-        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }

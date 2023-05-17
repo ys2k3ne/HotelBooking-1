@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hotelbooking.databinding.ActivityPaymentBinding
 import com.example.hotelbooking.models.PaymentInfo
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,6 +18,7 @@ class PaymentActivity : AppCompatActivity() {
     private var checkInDate: String? = null
     private var checkOutDate: String? = null
     private var hotelPrice: Double? = null
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,7 @@ class PaymentActivity : AppCompatActivity() {
         if (extras != null) {
             checkInDate = extras.getString("checkInDate")
             checkOutDate = extras.getString("checkOutDate")
-            hotelPrice = extras.getString("hotelPrice")?.toDoubleOrNull()
+            hotelPrice = extras.getDouble("hotelPrice")
 
             // Display booking information on the UI
             binding.checkInDate.text = checkInDate
@@ -42,17 +44,18 @@ class PaymentActivity : AppCompatActivity() {
             }
         }
 
+        // Set up Firebase authentication
+        auth = FirebaseAuth.getInstance()
+
         // Set event listener for the Confirm Payment button
         binding.confirmPaymentButton.setOnClickListener { confirmPayment() }
     }
 
-
     // Calculate the total amount to pay
     private fun calculateTotalAmount(): Double {
         val numOfDays = getNumOfDays(checkInDate ?: "", checkOutDate ?: "")
-        return numOfDays * hotelPrice!!
+        return numOfDays * (hotelPrice ?: 0.0)
     }
-
 
     // Save payment information to Firebase database
     private fun confirmPayment() {
@@ -68,6 +71,7 @@ class PaymentActivity : AppCompatActivity() {
         }
 
         // Create a PaymentInfo object to store payment information
+        val currentUser = auth.currentUser!!
         val paymentInfo = PaymentInfo(
             cardNumber = cardNumber,
             cardExpirationDate = cardExpirationDate,
@@ -76,13 +80,14 @@ class PaymentActivity : AppCompatActivity() {
             checkOutDate = checkOutDate!!,
             totalAmount = calculateTotalAmount()
         )
-// Save payment information to Firebase database
+
+        // Save payment information to Firebase database
         val database = FirebaseDatabase.getInstance()
-        val paymentRef = database.getReference("payments").push()
+        val paymentRef = database.getReference("payments").child(currentUser.uid).push()
         paymentRef.setValue(paymentInfo)
 
         // Go to PaymentResultActivity
-        val intent = Intent(this, PaymentResultActivity::class.java)
+        val intent = Intent(this, PaymentConfirmationActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -171,10 +171,14 @@ class EditHotelActivity : AppCompatActivity() {
 
         ref.setValue(newData)
             .addOnSuccessListener {
-                // Handle success here
+                // Cập nhật thành công, quay lại trang AdminActi
+                val intent = Intent(this, AdminActivity::class.java)
+                startActivity(intent)
+                finish()
             }
             .addOnFailureListener {
-                // Handle errors here
+                // Xử lý khi cập nhật không thành công
+                Toast.makeText(this, "Cập nhật không thành công", Toast.LENGTH_SHORT).show()
             }
 
     }

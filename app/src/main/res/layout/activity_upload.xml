@@ -41,7 +41,7 @@
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
                 android:maxLines="1"
-                android:hint="Enter task name"
+                android:hint="Enter Hotel name"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/lavender"/>
 
@@ -52,7 +52,7 @@
                 android:background="@drawable/lavender_border"
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
-                android:hint="Enter task description"
+                android:hint="Enter Hotel Address"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/lavender"/>
 
@@ -63,7 +63,7 @@
                 android:background="@drawable/lavender_border"
                 android:layout_marginTop="20dp"
                 android:padding="16dp"
-                android:hint="Enter task priority"
+                android:hint="Enter Hotel Price"
                 android:gravity="start|center_vertical"
                 android:textColor="@color/lavender"/>
 

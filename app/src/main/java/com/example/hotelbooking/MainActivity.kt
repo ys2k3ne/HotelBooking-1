@@ -2,33 +2,41 @@ package com.example.hotelbooking
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.hotelbooking.models.DataClass
+import androidx.recyclerview.widget.RecyclerView
 import com.example.hotelbooking.adapter.HotelAdapter
 import com.example.hotelbooking.databinding.ActivityMainBinding
+import com.example.hotelbooking.models.DataClass
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
-    var databaseReference: DatabaseReference? = null
-    var eventListener: ValueEventListener? = null
-    private lateinit var dataList: ArrayList<DataClass>
-    private lateinit var adapter: HotelAdapter
     private lateinit var binding: ActivityMainBinding
+    private lateinit var toolbar: Toolbar
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: HotelAdapter
+    private lateinit var dataList: ArrayList<DataClass>
+    private var databaseReference: DatabaseReference? = null
+    private var eventListener: ValueEventListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Thiết lập toolbar và menu
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         val gridLayoutManager = GridLayoutManager(this@MainActivity, 1)
         binding.recyclerView.layoutManager = gridLayoutManager
-        binding.search.clearFocus()
+        binding.searchView.clearFocus()
 
         val builder = AlertDialog.Builder(this@MainActivity)
         builder.setCancelable(false)
@@ -60,8 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 return false
             }
@@ -72,12 +79,28 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    fun searchList(text: String) {
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_logout -> {
+                FirebaseAuth.getInstance().signOut()
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun searchList(text: String) {
         val searchList = java.util.ArrayList<DataClass>()
         for (dataClass in dataList) {
-            if (dataClass.hotelName?.lowercase()
-                    ?.contains(text.lowercase(Locale.getDefault())) == true
-            ) {
+            if (dataClass.hotelName?.lowercase()?.contains(text.lowercase()) == true) {
                 searchList.add(dataClass)
             }
         }
